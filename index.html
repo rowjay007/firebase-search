@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firebase Search</title>
+</head>
+<body>
+  <h1>Firebase Search</h1>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js";
+
+    // Your Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAwj82wBDGbKhI5u62Puv1GHhjhIxboJ_M",
+      authDomain: "giveaway-prod.firebaseapp.com",
+      projectId: "giveaway-prod",
+      storageBucket: "giveaway-prod.appspot.com",
+      messagingSenderId: "851021885262",
+      appId: "1:851021885262:web:b0387c502ebd19faebf81f",
+      measurementId: "G-BZEZN1HP2X"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function searchForPhrase(phrase) {
+      try {
+        // List of known collections
+        const collections = [
+          'Authentication',
+          'ActionSessions',
+          'ActionSubmissions',
+          'ActionsTemplates',
+          // Add other collection names here
+        ];
+
+        for (const coll of collections) {
+          const colRef = collection(db, coll);
+          const snapshot = await getDocs(colRef);
+
+          snapshot.forEach((doc) => {
+            const data = doc.data();
+            Object.keys(data).forEach((key) => {
+              if (typeof data[key] === "string" && data[key].includes(phrase)) {
+                console.log(`Found in collection ${coll}, document ${doc.id}`);
+              }
+            });
+          });
+        }
+      } catch (error) {
+        console.error("Error searching for phrase: ", error);
+      }
+    }
+
+    // Call the search function
+    searchForPhrase("Purchase and play game for 2 hours");
+  </script>
+</body>
+</html>
