@@ -20,7 +20,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 async function searchExactTitle() {
   const collectionName = "ActionsTemplates"; 
-  const searchTerm = "Purchase and play game for 2 hours"; 
+  const searchTerm = "Let's play game for 2 hours"; 
   const q = query(
     collection(db, collectionName),
     where("title", "==", searchTerm) 
